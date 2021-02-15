@@ -41,13 +41,20 @@ app.get("/urls/new", (req, res) => {
 });
 //response for /urls/:shortURL
 app.get("/urls/:shortURL", (req, res) => {
+  console.log(urlDatabase);
   const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
-  res.render("urls_show", templateVars);
+  res.render("urls_show", templateVars); 
+});
+app.get("/u/:shortURL", (req, res) => {
+  let shortURL = req.params.shortURL;
+  const longURL = urlDatabase[shortURL];
+  res.redirect(longURL);
 });
 app.post("/urls", (req, res) => {
-  console.log(req.body);  // Log the POST request body to the console
-  urlDatabase[req.body] = generateRandomString();
-  console.log(urlDatabase[req.body]);
+  //console.log(req.body);  // Log the POST request body to the console
+  let shortURL = generateRandomString();
+  urlDatabase[shortURL] = req.body.longURL;
+  res.redirect('/urls/' + shortURL);
 });
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
