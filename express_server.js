@@ -59,10 +59,21 @@ app.post("/urls", (req, res) => {
 //post request to delete
 app.post('/urls/:shortURL/delete', (req, res) => {
   console.log("DELETE ROUTE HAS BEEN HIT");
-  console.log(req.params.shortURL);
   delete urlDatabase[req.params.shortURL];
   res.redirect('/urls');
-})
+});
+//post request to edit
+app.post('/urls/:shortURL/edit', (req, res) => {
+  const shortURL = req.params.shortURL;
+  res.redirect('/urls/' + shortURL);
+});
+app.post('/urls/:shortURL/replaceURL', (req, res) => {
+  console.log("Edit ROUTE HAS BEEN HIT");
+  const longURL = req.body.urlBox;
+  const shortURL = req.params.shortURL;  
+  urlDatabase[shortURL] = longURL;
+  res.redirect('/urls');
+});
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
