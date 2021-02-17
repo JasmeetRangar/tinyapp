@@ -42,6 +42,11 @@ app.get("/urls", (req, res) => {
 app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
+//error handler
+app.use(function(req, res, next){
+  res.status(404);
+  res.send("404 Error!");
+});
 //response for /urls/new
 app.get("/urls/new", (req, res) => {
   const templateVars = {
@@ -65,6 +70,14 @@ app.get("/u/:shortURL", (req, res) => {
   let shortURL = req.params.shortURL;
   const longURL = urlDatabase[shortURL];
   res.redirect(longURL);
+});
+//response for /register
+app.get("/form", (req, res) => {
+  const templateVars = {
+    username: req.cookies["username"],
+    // ... any other vars
+  };
+  res.render('form', templateVars);
 });
 app.post("/urls", (req, res) => {
   //console.log(req.body);  // Log the POST request body to the console
