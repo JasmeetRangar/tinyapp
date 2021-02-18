@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 const validateUser = (email, password, userDB) => {
 
   // userDB.filter(userObj => userObj.email === email)
@@ -9,7 +10,7 @@ const validateUser = (email, password, userDB) => {
   }
   if (Object.keys(currentUser).length === 0) {
     return { user: null, error: "email" };
-  } else if (currentUser.password === password) {
+  } else if (bcrypt.compareSync(password, currentUser.password)) {
     // successful login
     return { user: currentUser, error: null }
   } else {
