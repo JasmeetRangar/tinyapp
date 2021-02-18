@@ -60,13 +60,18 @@ app.get("/hello", (req, res) => {
 //response for /urls/new
 app.get("/urls/new", (req, res) => {
   const id = req.cookies["user_id"];
-  const currentUser = userFunctions.findUser(id, users);
+  if (id) {
+    const currentUser = userFunctions.findUser(id, users);
   //const currentUser = userFunctions.
   const templateVars = {
     user: currentUser
     // ... any other vars
   };
   res.render("urls_new", templateVars);
+  } else {
+    res.redirect('/login');
+  }
+  
 });
 //response for /urls/:shortURL
 app.get("/urls/:shortURL", (req, res) => {
