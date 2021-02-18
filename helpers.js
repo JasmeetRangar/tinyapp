@@ -35,15 +35,7 @@ const createUser = (userInfo, userDB) => {
     return null
   }
 }
-const generateRandomString = () => {
-  let result = '';
-  let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let charactersLength = characters.length;
-  for (let i = 0; i < 6; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
-};
+
 const findUser = (userID, userDB) => {
   let currentUser = {};
   for (let id in userDB) {
@@ -62,7 +54,7 @@ const findUserEmail = (email, userDB) => {
       return currentUser;
     }
   }
-  return false;
+  return undefined;
 }
 // check and return associated URLs for specific user ID
 const urlsForUser = function (id, database) {
@@ -78,4 +70,4 @@ const urlsForUser = function (id, database) {
   }
   return userURL;
 };
-module.exports = { validateUser, createUser, findUser, findUserEmail, urlsForUser, generateRandomString }
+module.exports = { validateUser, createUser, findUser, findUserEmail, urlsForUser }
