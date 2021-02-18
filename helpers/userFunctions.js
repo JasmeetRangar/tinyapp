@@ -55,4 +55,18 @@ const findUserEmail = (email, userDB) => {
   }
   return false;
 }
-module.exports = { validateUser, createUser, findUser, findUserEmail }
+// check and return associated URLs for specific user ID
+const urlsForUser = function (id, database) {
+
+  let userURL = {};
+
+  for (let shortURL of Object.keys(database)) {
+    if (database[shortURL].userID === id) {
+      userURL[shortURL] = {
+        longURL: database[shortURL].longURL,
+      };
+    }
+  }
+  return userURL;
+};
+module.exports = { validateUser, createUser, findUser, findUserEmail, urlsForUser }
