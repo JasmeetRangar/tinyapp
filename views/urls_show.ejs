@@ -25,8 +25,39 @@
         <h4>Edit</h4>
         <form method="POST" action="/urls/<%= shortURL %>/replaceURL?_method=PUT">
           New URL : <input type="text" name="urlBox">
-          <button>Submit</button>
+          <button>Submit</button><br><br><br>
+          
+          <h4>Visitors</h4>
         </form>
+        <table class="table table-sm table-bordered">
+          <tr>
+            <th>Visitor ID</th>
+            <th>Time of Visit</th>
+          </tr>
+          <% for (let visit of visits) { %>
+            <tr>
+              <td><%= visit[0] %></td>
+              <% let date = new Date(visit[1]); %>
+              <td><%= date.toLocaleString() %></td>
+            </tr>
+            <% } %>
+        </table>
+        <table class="table table-sm table-bordered">
+          <tr>
+            <th scope="col">Total Visits</th>
+            <th scope="col">Unique Visits</th>
+          </tr>
+        <tbody>
+          <tr>
+            <td><%= visits.length %></td>
+            <% let uniqueVisitors = []; %>
+            <% visits.forEach((visit) => { %>
+              <% if (!uniqueVisitors.includes(visit[0])) uniqueVisitors.push(visit[0]); %>
+            <% }); %>
+            <td><%= uniqueVisitors.length %></td>
+          </tr>
+        </tbody>
+      </table>
         </p>
       </div>
       <div class="card-footer text-muted"></div>
