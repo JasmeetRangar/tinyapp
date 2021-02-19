@@ -1,3 +1,5 @@
+//--------Required dependencies
+
 const userFunctions = require('./helpers/userFunctions.js');
 const methodOverride = require('method-override');
 const bodyParser = require("body-parser");
@@ -7,7 +9,7 @@ const cookieSession = require("cookie-session");
 const app = express();
 const PORT = 8080;
 
-
+//-------------app configs
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -16,9 +18,9 @@ app.use(cookieSession({
   name: 'session',
   keys: ['7f69fa85-caec-4d9c-acd7-eebdccb368d5', 'f13b4d38-41c4-46d3-9ef6-8836d03cd8eb']
 }));
-app.use(methodOverride('_method'))
+app.use(methodOverride('_method'));
 
-
+//--------Requests and responses
 
 
 const users = {
@@ -100,12 +102,12 @@ app.get("/urls/:shortURL", (req, res) => {
     visits: urlDatabase[req.params.shortURL]["visits"]
     // ... any other vars
   };
-  console.log(templateVars.visits);
+  //console.log(templateVars.visits);
   res.render("urls_show", templateVars);
 });
 app.get("/u/:shortURL", (req, res) => {
   const id = req.session.user_id;
-  const currentUser = userFunctions.findUser(id, users);
+  //const currentUser = userFunctions.findUser(id, users);
   let shortURL = req.params.shortURL;
   const longURL = urlDatabase[shortURL]["longURL"];
   let visitorId = req.session['visitor-id'];
@@ -116,7 +118,7 @@ app.get("/u/:shortURL", (req, res) => {
   const timestamp = Date.now();
   // add visit to url db
   urlDatabase[req.params.shortURL]['visits'].push([visitorId, timestamp]);
-  console.log(urlDatabase[shortURL].visits);
+  //console.log(urlDatabase[shortURL].visits);
   res.redirect(longURL);
 });
 //response for /register
@@ -150,9 +152,10 @@ app.post("/urls", (req, res) => {
     let shortURL = userFunctions.generateRandomString();
     urlDatabase[shortURL] = {
       longURL: req.body.longURL,
-      userID: id
+      userID: id,
+      visits: []
     };
-    console.log(urlDatabase);
+    //console.log(urlDatabase);
     res.redirect('/urls/' + shortURL);
   }
 });
@@ -237,7 +240,7 @@ app.post('/logout', (req, res) => {
   res.redirect('/urls');
 });
 //error handler
-app.use(function (req, res, next) {
+app.use(function(req, res, next) {
   res.status(404);
   res.send("404 Error!");
 });
