@@ -10,16 +10,16 @@ Register to compress URLs or Login
 !["New URL"](/img/NewURL.png)
 Create new URL
 
-!["Enter URL"](/img/new.jpg)
+!["Enter URL"](/img/new.JPG)
 Enter desired URL to shorten and submit
 
-!["Tiny URL"](/img/shortened.jpg)
+!["Tiny URL"](/img/shortened.JPG)
 This is your tiny URL page!
 
-!["Analytics](/img/analytics.jpg)
+!["Analytics](/img/analytics.JPG)
 As you get more user, get all the view analytics on this page
 
-!["Dashboard"](/img/dashboard.jpg)
+!["Dashboard"](/img/dashboard.JPG)
 View all your URLs on you dashboard, edit and delete them as well!
 ## Dependencies
 
