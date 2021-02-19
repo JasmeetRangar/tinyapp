@@ -4,7 +4,7 @@ TinyApp is a full stack web application built with Node and Express that allows 
 
 ## Final Product
 
-!["Register"](/img/register.jpg)
+!["Register"](/img/Register.jpg)
 Register to compress URLs or Login 
 
 !["New URL"](/img/NewURL.png)
