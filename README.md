@@ -4,22 +4,22 @@ TinyApp is a full stack web application built with Node and Express that allows 
 
 ## Final Product
 
-!["Register"](./img/register.jpg)
+!["Register"](/img/register.jpg)
 Register to compress URLs or Login 
 
-!["New URL"](./img/NewURL.png)
+!["New URL"](/img/NewURL.png)
 Create new URL
 
-!["Enter URL"](./img/new.jpg)
+!["Enter URL"](/img/new.jpg)
 Enter desired URL to shorten and submit
 
-!["Tiny URL"](./img/shortened.jpg)
+!["Tiny URL"](/img/shortened.jpg)
 This is your tiny URL page!
 
-!["Analytics](./img/analytics.jpg)
+!["Analytics](/img/analytics.jpg)
 As you get more user, get all the view analytics on this page
 
-!["Dashboard"](./img/dashboard.jpg)
+!["Dashboard"](/img/dashboard.jpg)
 View all your URLs on you dashboard, edit and delete them as well!
 ## Dependencies
 
