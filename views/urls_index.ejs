@@ -26,11 +26,12 @@
         <% if (!user) { %>
           <tr>Please login or register to view URLs.</tr>
           <% } else { %>
+          <tr><a href="/urls/new">Create new TinyURL</a></tr>
         <% for(let url in urls) { %>
           <tr>
             <td><%= url %></td>
             <td><%= urls[url]["longURL"] %></td>
-            <td><form method="POST" action="/urls/<%= url %>/edit">
+            <td><form method="GET" action="/urls/<%= url %>/edit">
               <button>Edit</button></form></td>
             <td><form method="POST" action="/urls/<%= url %>/delete?_method=DELETE">
             <button>Delete</button></form></td>

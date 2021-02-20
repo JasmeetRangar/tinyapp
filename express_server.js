@@ -46,11 +46,12 @@ const urlDatabase = {
 
 //response for homepage
 app.get("/", (req, res) => {
-  res.send("Hello!");
-});
-//response for /urls.json
-app.get("/urls.json", (req, res) => {
-  res.json(urlDatabase);
+  const id = req.session.user_id;
+  if (!id) {
+    res.redirect("/login");
+  } else {
+    res.redirect("/urls");
+  }
 });
 //response for /urls
 app.get("/urls", (req, res) => {
@@ -89,21 +90,29 @@ app.get("/urls/new", (req, res) => {
 });
 //response for /urls/:shortURL
 app.get("/urls/:shortURL", (req, res) => {
-  //console.log(urlDatabase);
   const id = req.session.user_id;
-  const currentUser = userFunctions.findUser(id, users);
-  
-  const templateVars = {
-    user: currentUser,
-    currentID: id,
-    shortURL: req.params.shortURL,
-    longURL: urlDatabase[req.params.shortURL]["longURL"],
-    URLuser: urlDatabase[req.params.shortURL]["userID"],
-    visits: urlDatabase[req.params.shortURL]["visits"]
-    // ... any other vars
-  };
-  //console.log(templateVars.visits);
-  res.render("urls_show", templateVars);
+  if (!urlDatabase[req.params.shortURL]) {
+    res.status(404).send('does not exists');
+  }
+  if (!id) {
+    res.status(400).send("please Login");
+    //res.redirect('/login');
+  } else if (id !== urlDatabase[req.params.shortURL].userID) {
+    res.status(400).send("Not your URL");
+    //res.redirect('/urls');
+  } else {
+    const currentUser = userFunctions.findUser(id, users);
+    const templateVars = {
+      user: currentUser,
+      currentID: id,
+      shortURL: req.params.shortURL,
+      longURL: urlDatabase[req.params.shortURL]["longURL"],
+      URLuser: urlDatabase[req.params.shortURL]["userID"],
+      visits: urlDatabase[req.params.shortURL]["visits"]
+      // ... any other vars
+    };
+    res.render("urls_show", templateVars);
+  }
 });
 app.get("/u/:shortURL", (req, res) => {
   const id = req.session.user_id;
@@ -118,12 +127,14 @@ app.get("/u/:shortURL", (req, res) => {
   const timestamp = Date.now();
   // add visit to url db
   urlDatabase[req.params.shortURL]['visits'].push([visitorId, timestamp]);
-  //console.log(urlDatabase[shortURL].visits);
   res.redirect(longURL);
 });
 //response for /register
 app.get("/form", (req, res) => {
   const id = req.session.user_id;
+  if (id) {
+    res.redirect('/urls');
+  }
   const currentUser = userFunctions.findUser(id, users);
   //const currentUser = userFunctions.
   const templateVars = {
@@ -134,19 +145,21 @@ app.get("/form", (req, res) => {
 });
 app.get("/login", (req, res) => {
   const id = req.session.user_id;
+  if (id) {
+    res.redirect('/urls');
+  }
   const currentUser = userFunctions.findUser(id, users);
   //const currentUser = userFunctions.
   const templateVars = {
     user: currentUser
     // ... any other vars
   };
-  //console.log(users);
   res.render('loginForm', templateVars);
 });
 app.post("/urls", (req, res) => {
   const id = req.session.user_id;
   if (!id) {
-    res.statusMessage('Not logged in');
+    res.status(400);
     res.redirect('/url');
   } else {
     let shortURL = userFunctions.generateRandomString();
@@ -155,7 +168,6 @@ app.post("/urls", (req, res) => {
       userID: id,
       visits: []
     };
-    //console.log(urlDatabase);
     res.redirect('/urls/' + shortURL);
   }
 });
@@ -175,7 +187,7 @@ app.delete('/urls/:shortURL/delete', (req, res) => {
   }
 });
 //post request to edit
-app.post('/urls/:shortURL/edit', (req, res) => {
+app.get('/urls/:shortURL/edit', (req, res) => {
   const shortURL = req.params.shortURL;
   res.redirect('/urls/' + shortURL);
 });
@@ -187,7 +199,6 @@ app.put('/urls/:shortURL/replaceURL', (req, res) => {
     const shortURL = req.params.shortURL;
     urlDatabase[shortURL].longURL = longURL;
   }
-  //console.log(urlDatabase);
   res.redirect('/urls');
 });
 app.post('/login', (req, res) => {
@@ -197,7 +208,6 @@ app.post('/login', (req, res) => {
     res.status(400).send("Email or password cannot be empty.");
   }
   const { user, error } = userFunctions.validateUser(email, password, users);
-  //console.log(user, error);
   if (user) {
     req.session.user_id = user.id;
     res.redirect('/urls');
@@ -222,8 +232,6 @@ app.post('/register', (req, res) => {
     res.status(400);
     res.send("Email already registered as a user.");
 
-    // console.log(users);
-
   } else {
     users[tempID] = {
       id: tempID,
@@ -231,16 +239,15 @@ app.post('/register', (req, res) => {
       password: hashedPassword
     };
     req.session.user_id = tempID;
-  }
-  //console.log(users);
-  res.redirect('/urls');
+    res.redirect('/urls');
+  }  
 });
 app.post('/logout', (req, res) => {
   req.session = null;
   res.redirect('/urls');
 });
 //error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.status(404);
   res.send("404 Error!");
 });
